@@ -420,7 +420,7 @@ if ($step == 0){
             echo table_row_description('', "<br>$msg_error");
         }else{
             echo table_row_check('connect to mysql', TRUE ); 
-            $db_selected = @mysqli_select_db($dbhcheck_session_value("DBNAME"));
+            $db_selected = @mysqli_select_db($dbh,check_session_value("DBNAME"));
             if ($db_selected ){
 
                 # InnoDB support
