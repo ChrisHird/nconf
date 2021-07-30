@@ -2,20 +2,21 @@
 #
 # File for Version number and info
 #
-define("VERSION_NUMBER", '1.4');
+define("VERSION_NUMBER", '1.3.1');
 define("VERSION_STRING", '<img src="design_templates/nconf_fresh/nconf-logo-16.gif" style="vertical-align:bottom" alt="nconf-logo">
-                          <b>NEMS NConf '.VERSION_NUMBER.' (dev)</b>');
+                          <b>NConf '.VERSION_NUMBER.' (dev)</b>');
 
-define("VERSION_NOT_FINAL_WARNING", 'This version of NConf contains heavy customizations for <a href="http://baldnerd.com/nems" target="_blank">NEMS</a> on modern architecture. 
+define("VERSION_NOT_FINAL_WARNING", 'This version of NConf contains heavy customizations for <a href="http://shieldadvanced.com/AAG.php" target="_blank">AAG</a> on modern architecture. 
+				    <br> This version is a copy of the version used by nemslinux and updated by Robbie Ferguson.	
                                     <br>This version of the release is not directly supported by the original authors.
-				    <br />To contribute, visit <a href="https://github.com/Cat5TV/nconf" target="_blank">https://github.com/Cat5TV/nconf</a>');
+				    <br />To contribute, visit <a href="https://github.com/ChrisHird/nconf" target="_blank">https://github.com/ChrisHird/nconf</a>');
 
 define("COPYRIGHT_STRING", '<i>Copyright &copy; 2006 - 2012 <br>Sunrise Communications AG, Zurich, Switzerland</i>
                           <br><br>Project homepage: <a href="http://www.nconf.org/" target="_blank">www.nconf.org</a>
-			  <br /><br />Adapted for <a href="https://nemslinux.com" target="_blank">Nagios Enterprise Monitoring Server</a> by <a href="http://baldnerd.com" target="_blank">Robbie Ferguson</a>');
+			  <br /><br />Adapted for <a href="https://shieldadvanced.com" target="_blank">Nagios Enterprise Monitoring Server</a> by <a href="http://shieldadvanced.com" target="_blank">Shield Advanced Solutions Ltd</a>');
 
 define("DISCLAIMER_STRING", '<b>Developed by:</b>
-                          <br>Fabian Gander, Angelo Gargiulo, Bernhard Waldvogel, Robbie Ferguson;
+                          <br>Fabian Gander, Angelo Gargiulo, Bernhard Waldvogel, Robbie Ferguson,Chris Hird;
                           <br><br><b>License:</b>
                           <br>This software is distributed under the <a href="http://www.opensource.org/licenses/gpl-2.0.php" target="_blank">
                             GNU General Public License (GPL)</a>.
