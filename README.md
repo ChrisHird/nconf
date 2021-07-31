@@ -49,4 +49,4 @@ NConf is intended to be deployed within a private network or intranet. As such, 
 
 B. Manual installation
 ----------------------
-To be updated...
+To be updated... I now have a working copy running with the above settings, I will add a complete installation guide.
