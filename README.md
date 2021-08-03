@@ -22,7 +22,7 @@ C. Manual update
 A. Requirements
 ---------------
 
-NConf system requirements:
+NConf system requirements: (we installed and tested with the following)
 
     * Apache webserver 2.4.38
     * PHP 7.3, php-mysqli, php-ldap (only if using LDAP auth)
