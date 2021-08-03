@@ -2,7 +2,7 @@
 require_once 'include/head.php';
 
 $lock_file = 'temp/generate.lock';
-$status = check_file('file_exists', $lock_file, TRUE, "File/Directory still exists, please remove it: "); 
+$status = check_file('file_exists', $lock_file, TRUE, "File/Directory still exists, please remove it: ");
 
 
 if ( $status ){
@@ -17,8 +17,8 @@ if ( $status ){
     # but this will prevent lock file to stay there
     if ( $lock_file_age < 600 ){
         # some one other is generating the config
-        NConf_DEBUG::set('Someone else is already generating the configuration. If you believe this is in error, run: sudo nems-quickfix', 'ERROR');
-        
+        NConf_DEBUG::set('Someone else is already generating the configuration.', 'ERROR');
+
 
         # close page and cancel action
         if ( NConf_DEBUG::status('ERROR') ) {
@@ -94,8 +94,8 @@ $status = flock($generate_lock_handle, LOCK_EX | LOCK_NB); //lock the file
                         // progress status from file must be smaller or match the current value
                         // otherwise the status should be taken on else
                         current_percent += 1;
-                        
-                        
+
+
                     }else{
                         // progress status is biger, go to that current state
                         if ( percent > 100 ){
@@ -149,4 +149,3 @@ $status = flock($generate_lock_handle, LOCK_EX | LOCK_NB); //lock the file
 require_once 'include/foot.php';
 
 ?>
-

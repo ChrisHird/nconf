@@ -1,5 +1,0 @@
-# If using nconf outside NEMS Linux, simply delete this file and rename the install file and folder to .php instead of .php_
-AuthType Basic
-AuthName "NEMS nConf"
-AuthUserFile /var/www/htpasswd
-Require valid-user
