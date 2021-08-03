@@ -23,7 +23,7 @@ A. Requirements
 ---------------
 
 NConf system requirements:
-   TESTED with the following
+
     * Apache webserver 2.4.38
     * PHP 7.3, php-mysqli, php-ldap (only if using LDAP auth)
     * MariaDB 10.3.29 (with InnoDB)
