@@ -155,7 +155,7 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
 
     ?>
 
-    <title>NEMS NConf</title>
+    <title>NConf</title>
 </head>
 
 
