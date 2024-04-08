@@ -7,7 +7,9 @@ NConf homepage:
 http://www.nconf.org/
 
 **THIS VERSION HAS BEEN RE-WORKED BY ROBBIE FERGUSON TO OPERATE UNDER PHP 7.0+ / mySQLi**
-**Note this is a rework of the work done by Robbie to remove the NEMS references and fix a couple of coding issues**
+
+**NOTE : this is a rework of the work done by Robbie to remove the NEMS references and fix a couple of coding issues. 
+We will maintain this copy and not keep in step with Robbies copy**
 
 
 
