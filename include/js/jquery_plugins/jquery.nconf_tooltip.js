@@ -15,7 +15,7 @@ jQuery.nconf_tooltip = function() {
         document.body.appendChild (flyingObj);
     }
 
-    $('.jQ_tooltip').live("mouseenter", function(e) {
+    $('.jQ_tooltip').on("mouseenter", function(e) {
         if (!flyingObj) {
             CreateFlyingObj ();
         }
@@ -30,7 +30,7 @@ jQuery.nconf_tooltip = function() {
     });
 
 
-    $('.jQ_tooltip').live("mousemove", function(e) {
+    $('.jQ_tooltip').on("mousemove", function(e) {
         if (!flyingObj) {
             CreateFlyingObj ();
         }
@@ -39,7 +39,7 @@ jQuery.nconf_tooltip = function() {
 
     });
 
-    $('.jQ_tooltip').live("mouseleave", function(e) {
+    $('.jQ_tooltip').on("mouseleave", function(e) {
         if (flyingObj != null) {
             flyingObj.style.display = "none";
             $(this).attr("title", title_tmp );

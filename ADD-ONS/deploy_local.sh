@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OUTPUT_DIR="/var/www/html/nconf/output/"
+OUTPUT_DIR="/usr/local/nagios/share/nconf/output/"
 NAGIOS_DIR="/usr/local/nagios/etc/"
 TEMP_DIR=${NAGIOS_DIR}"import/"
 CONF_ARCHIVE="NagiosConfig.tgz"

@@ -36,8 +36,9 @@ define("OVERVIEW_DETAILS",          "details");
 define("SELECT_EMPTY_FIELD",        "&nbsp;");
 
 # Navigation: Name of standard user and admin part
-define("TXT_MENU_BASIC",            "Basic Items");             # USER MENU
-define("TXT_MENU_ADDITIONAL",       "Additional Items");        # ADMIN MENU
+define("TXT_MENU_BASIC",            "Monitor Configuration");             # USER MENU
+define("TXT_MENU_MISC",            "Miscellaneous");
+define("TXT_MENU_ADDITIONAL",       "System Configuration");        # ADMIN MENU
 
 
 

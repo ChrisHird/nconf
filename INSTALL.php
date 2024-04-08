@@ -28,7 +28,7 @@ if ( !isset($_POST["step"]) ){
     }else{
         #refreshing, no step modification
     }
-    
+
 }
 #
 # DB creation / handling
@@ -159,7 +159,7 @@ function table_row_check($title, $status){
             <td class="status_failed">FAILED</td>
             <td>
                 <a href="javascript:swap_visible(\''.$title.'\')">
-                <img src="img/icon_expand.gif" id="swap_icon_'.$title.'" > 
+                <img src="img/icon_expand.gif" id="swap_icon_'.$title.'" >
                 show errorcode
                 </a>
             </td>
@@ -231,7 +231,7 @@ function write_config($file, $replacers, $special = ''){
             }else{
                 $log .= htmlspecialchars($line)."<br>";
             }
-            
+
             # add line to config var
             $new_config .= $line;
         }
@@ -248,7 +248,7 @@ function write_config($file, $replacers, $special = ''){
             return TRUE;
         }
         fclose($fh);
-    
+
     }
 
 }
@@ -267,7 +267,7 @@ function parse_mysql_dump($url){
             //   - why is there a backslash bevore $
             //   - [\040] seems not work on xampp (windows) installation
             //if(preg_match("/;[\040]*\$/", $sql_line)){
-            
+
             if(preg_match('/;[\s]*$/', $sql_line)){
               $result = db_handler($query, 'insert', 'running sql statement');
               if (!$result){
@@ -395,7 +395,7 @@ if ($step == 0){
         echo '<input type=hidden name="db_status" value="connect">';
 
         echo '<table width="200">';
-        
+
     if ($db_check !== FALSE ){
         echo table_row_description('Checks', '');
         if (function_exists('mysqli_connect')){
@@ -419,7 +419,7 @@ if ($step == 0){
             $msg_error = NConf_DEBUG::show_debug('ERROR');
             echo table_row_description('', "<br>$msg_error");
         }else{
-            echo table_row_check('connect to mysql', TRUE ); 
+            echo table_row_check('connect to mysql', TRUE );
             $db_selected = @mysqli_select_db($dbh,check_session_value("DBNAME"));
             if ($db_selected ){
 
@@ -447,17 +447,17 @@ if ($step == 0){
 
 
                 # DB selected, try to create tables
-                echo table_row_check('access database', TRUE ); 
-                
+                echo table_row_check('access database', TRUE );
+
                 # check if tables are set ....
                 //$query = 'SHOW TABLES FROM '.check_session_value("DBNAME");
                 $query = 'SELECT fk_id_item FROM ItemLinks LIMIT 1;';
-                $result = mysqli_query($dbh,$query, $dbh);
+                $result = mysqli_query($dbh,$query);
                 if ($result){
                     # say that db is done, go to next step
                     echo table_row_check('tables were already created', TRUE );
                     # check if nconf already is installed
-                    if ( file_exists('config/nconf.php') ){
+                    if ( file_exists('config/nconf1.php') ){
                         echo table_row_check('NConf config files check', FALSE );
                         echo '</table><table width="450">';
                         echo table_row_description('', '<br>If you previously installed an older version of NConf, please use the <b><a href="UPDATE.php">UPDATE</a></b> function!');
@@ -492,12 +492,12 @@ if ($step == 0){
                     }else{
                         echo table_row_check('open '.$install_file, FALSE );
                     }
-                    
+
                 }
 
             }else{
                 # failed to select db
-                echo table_row_check('access database', FALSE ); 
+                echo table_row_check('access database', FALSE );
                 # try to create DB
                 $query = 'CREATE DATABASE '.check_session_value("DBNAME").';';
                 $result = mysqli_query($dbh,$query, $dbh);
@@ -539,7 +539,7 @@ if ($step == 0){
     echo table_row_select("AUTH_TYPE", array("file" => "file"), "file", "How do you want to authenticate?", '', 1);
     echo table_row_text("file_admin_password", "", "Password for admin when AUTH_TYPE = file<br>Do <b>not</b> use '::' (2 colons) in password", "password", '', '', 1);
     echo table_row_description("WARNING", "Please do not use '::' (2 colons) in passwords! You will not be able to login otherwise!<br>'::' is used as delimiter.", "none");
-    
+
     echo NConf_HTML::limit_space(
             NConf_HTML::show_highlight('Info', 'For more authentication setups, please reffer to the online documentation!'
                                              . '<br>Just finish your installation and then have a look here --> <a href="http://nconf.org/dokuwiki/doku.php?do=search&id=Authentication+specific+options" target="_blank">Authentication @ nconf.org</a>')
@@ -601,7 +601,7 @@ if ($step == 0){
     if ( !file_exists('config/nconf.php') ){
         $save_error = TRUE;
     }else{
-        
+
         if ($_POST["submit"] != "Retry"){
             # delete some vars if user have changed auth type, but he was already in session
             if (!isset($_POST["AUTH_TYPE"]) AND check_session_value("AUTH_TYPE") ){
@@ -630,7 +630,7 @@ if ($step == 0){
         echo table_row_check('NConf basic conf', $nconf_config );
         if ($nconf_config !== TRUE) $save_error = TRUE;
 
-        # authentication 
+        # authentication
         if (check_session_value("AUTH_ENABLED") ){
             $auth_type_config = write_config('config/authentication.php', array('AUTH_ENABLED', 'AUTH_TYPE') );
             echo table_row_check('authentication conf', $auth_type_config );

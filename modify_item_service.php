@@ -138,7 +138,7 @@ require_once 'include/head.php';
             },
             label: "add"
         }).addClass("ui-button-text-icon-primary")
-        .live('click', function() {
+        .on('click', function() {
             var host_id    = $("#host_ID").val();
             var service_id = $("#add_checkcommand option:selected").val();
             add_service( host_id, service_id, "add_service");
@@ -150,7 +150,7 @@ require_once 'include/head.php';
             },
             label: "Save"
         }).addClass("ui-button-text-icon-primary")
-        .live('click', function() {
+        .on('click', function() {
             $("#advanced_services_loading").fadeIn("slow", function(){
                 var host_id    = $("#host_ID").val();
 
@@ -199,7 +199,7 @@ require_once 'include/head.php';
 
         
         // clone //
-        $('.clone').live('click', function() {
+        $('.clone').on('click', function() {
             // show load icon
             $("#service_loading").show("blind", "slow");
             

@@ -2,6 +2,7 @@
 
     </div> <!-- END OF DIV "maincontent" -->
 </div>     <!-- END OF DIV "mainwindow" -->
+</div>
 <!-- empty clear div for space to footer (without that, it will not work correctly when footer has clear:both! -->
 <div class="clearer"></div>
 <div id="footer">

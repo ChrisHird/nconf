@@ -63,7 +63,7 @@ function escape_string($string){
     global $dbh;
     # Strip slashes if magic_quotes_gpc is ON (DEPRECATED as of PHP 5.3.0 and REMOVED as of PHP 6.0.0.)
     # Reverse magic_quotes_gpc/magic_quotes_sybase effects on those vars if ON.
-    if (get_magic_quotes_gpc() ){
+    if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc() ){
         message('DEBUG', "magic_quotes_gpc is ON: using stripslashes to correct it");
         $string = stripslashes($string);
     }
@@ -335,10 +335,10 @@ function history_add($action, $name, $value, $fk_id_item = 'NULL', $feature = ''
 
 
 # reloads the db connection and selects the db
-# (must be user after auth by sql)
-function relaod_nconf_db_connection(){
+# (must be used after auth by sql)
+function reload_nconf_db_connection(){
     $dbh = mysqli_connect(DBHOST,DBUSER,DBPASS);
-    mysqli_select_db($dbhDBNAME);
+    mysqli_select_db($dbh,DBNAME);
 }
 
 
@@ -1016,10 +1016,24 @@ function db_handler($query, $output = "result", $debug_title = "query"){
         message ('INFO', "DB_NO_WRITES activated, no deletions or modifications will be performed");
     }else{
         $result = mysqli_query($dbh,$query);
+        $response_data = '<br /><br />Resulting Data:<br />';
         // new DEBUG output
         $debug_query        = NConf_HTML::text_converter("sql_uppercase", $query);
         $debug_query_output = NConf_HTML::swap_content($debug_query, 'Query', FALSE, FALSE);
-        $debug_data_result  = '<br>(Result output not yet defined)';
+/*
+        if ($result !== false) {
+          if (mysqli_num_rows($result) > 0) {
+            while ($row = mysqli_fetch_assoc($result)) {
+              $response_data .= print_r($row, true);
+            }
+          }
+        } else {
+          $response_data = "Query failed: " . mysqli_error($dbh);
+        }
+*/
+$response_data = ''; // not working right now  - the loop above crashes NConf.
+
+        $debug_data_result  = '<br /><br />Result:<br /><pre>' . print_r($result,true) . $response_data . '</pre>';
 
         if ( $result ){
             # Output related stuff
@@ -1048,7 +1062,11 @@ function db_handler($query, $output = "result", $debug_title = "query"){
                     break;
                 case "getOne":
                     $first_row = mysqli_fetch_row($result);
-                    $return = $first_row[0];
+                    if ($first_row !== null) {
+                      $return = $first_row[0];
+                    } else {
+                      $return = null;
+                    }
                     # DEBUG output with new API module:
                     //$debug_data_result  = NConf_HTML::text('<b>Result: getOne:</b>'.$return);
                     break;
@@ -1204,7 +1222,6 @@ function add_attribute($id, $id_attr, $attr_value){
     $attr = array();
     $attr["key"] = $id_attr;
     $attr["value"] = $attr_value;
-    
 
     # get class_id of item    --> for function
     $class_id = db_templates("get_classid_of_item", $id);
@@ -1251,7 +1268,7 @@ function add_attribute($id, $id_attr, $attr_value){
             $attr_datatype = db_templates("attr_datatype", $attr["key"]);
 
             # save assign_one/assign_many/assign_cust_order in ItemLinks
-            while ( $many_attr = each($attr["value"]) ){
+            foreach ($attr["value"] as $many_attr["value"]) {
                 # if value is empty go to next one
                 if (!$many_attr["value"]){
                     continue;
@@ -1293,6 +1310,7 @@ function add_attribute($id, $id_attr, $attr_value){
     }
 
 } // end of function add_attribute
+
 
 
 
@@ -1454,7 +1472,7 @@ function check_file($check, $files, $outcome = TRUE, $failed_message = ''){
             if ( call_user_func($check, $file) != $outcome ){
                 # if no message is set
                 if ( empty($failed_message) ) $failed_message = '"'.$check.'" function failed for : ';
-                NCONF_DEBUG::set($file, 'CRITICAL', $failed_message);
+                NConf_DEBUG::set($file, 'CRITICAL', $failed_message);
                 $failed = TRUE;
             }
         }

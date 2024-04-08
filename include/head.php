@@ -8,6 +8,9 @@ if (file_exists('config/nconf.php')){
     require_once('main.php');
 }
 
+// State this is not a NEMS install
+$nemsver = 0;
+
 // Clean cache (session)
 if ( isset($_GET["clear"]) ){
     if ( !empty($_GET["class"]) ){
@@ -32,7 +35,7 @@ if ( isset($_GET["logout"]) ){
     }
     // Unset all of the session variables.
     $_SESSION = array();
-    
+
     // If it's desired to kill the session, also delete the session cookie.
     if (ini_get("session.use_cookies")) {
         $params = session_get_cookie_params();
@@ -98,11 +101,6 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
     }
     ?>
 
-    <!-- Load nconf js functions -->
-    <script src="include/js/nconf.js" type="text/javascript"></script>
-    <script src="include/js/ajax.js" type="text/javascript"></script>
-
-    
     <?php
     if ( defined('AUTO_COMPLETE') ){
         echo '
@@ -116,19 +114,20 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
     include_once('design_templates/'.TEMPLATE_DIR.'/jQuery/init.php');
     if ( defined('JQUERY') AND JQUERY == 1 ){
         echo '<!-- Load jQuery -->
-            <script src="include/js/jquery.js" type="text/javascript"></script>
-            <script src="include/js/jquery-ui.custom.min.js" type="text/javascript"></script>
+            <script src="include/js/jquery.min.js" type="text/javascript"></script>
+            <script src="include/js/jquery-migrate.min.js"></script>
+            <script src="include/js/jquery-ui.min.js" type="text/javascript"></script>
             ';
         echo '<!-- Load jQuery plugins (also nconf-jquery plugins/functions -->
             <script src="include/js/jquery_plugins/jquery.nconf_ajax_debug.js" type="text/javascript"></script>
             <script src="include/js/jquery_plugins/jquery.nconf_help_admin.js" type="text/javascript"></script>
             <script src="include/js/jquery_plugins/jquery.nconf_tooltip.js" type="text/javascript"></script>
-            <script src="include/js/jquery_plugins/jquery.nconf_accordion_list.js" type="text/javascript"></script>
+<!--            <script src="include/js/jquery_plugins/jquery.nconf_accordion_list.js" type="text/javascript"></script>-->
             <script src="include/js/jquery_plugins/jquery.nconf_head.js" type="text/javascript"></script>
             ';
 
         // jquery theme switcher
-        
+
         if ( defined('JQUERY_THEME_SWITCHER') AND JQUERY_THEME_SWITCHER == 1 ){
             echo '<script type="text/javascript" src="include/js/themeswitchertool.js"></script>';
             echo js_prepare("
@@ -139,16 +138,21 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
                   });
             ");
         }
-        
+
+
+
 
     }
 
-    
-
+echo '
+    <!-- Load nconf js functions -->
+    <script src="include/js/nconf.js" type="text/javascript"></script>
+    <script src="include/js/ajax.js" type="text/javascript"></script>
+';
 
     /* NConf design by jQuery UI Themes*/
     if ( !defined("JQUERY_THEME") ) define("JQUERY_THEME", "nconf");
-    echo '<link rel="stylesheet" type="text/css" href="design_templates/'.TEMPLATE_DIR.'/jQuery/'.JQUERY_THEME.'/jquery-ui.custom.css">';
+    echo '<link rel="stylesheet" type="text/css" href="design_templates/'.TEMPLATE_DIR.'/jQuery/jquery-ui-1.12.1/jquery-ui.min.css">';
 
     echo '<link rel="stylesheet" type="text/css" href="design_templates/'.TEMPLATE_DIR.'/jQuery/jquery.table.css">';
     echo '<link rel="stylesheet" type="text/css" href="design_templates/'.TEMPLATE_DIR.'/jQuery/nconf-widget.css">';
@@ -162,7 +166,7 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
 
 
 <body>
-    <div id="switcher" style="position: absolute; right: 0"></div>
+<div id="switcher" style="position: absolute; right: 0"></div>
 <div id="title">
     <center>
         <div id="logo"></div>
@@ -191,7 +195,7 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
         # check for mysql support before calling any DB functions
         $mysql_status = function_exists('mysqli_connect');
         if (!$mysql_status) message ($critical, 'Could not find function "mysqli_connect()"<br>You must configure PHP with mysql support.');
-        
+
         echo '<div id="maincontent">';
     }elseif ( ( isset($_SERVER["REQUEST_URI"]) AND preg_match( '/'.preg_quote('UPDATE.php').'/', $_SERVER['REQUEST_URI']) )
             AND (file_exists('config/nconf.php')) ){
@@ -231,7 +235,7 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
 
                     # User seems not logged in
                     echo '<div id="centercontent">';
-                } elseif (  ( isset($_SESSION["group"]) ) AND ($_SESSION["group"] == "user") ) { 
+                } elseif (  ( isset($_SESSION["group"]) ) AND ($_SESSION["group"] == "user") ) {
 
                     require_once(NCONFDIR."/include/menu/menu_start.html");
                     require_once(NCONFDIR."/include/menu/menu_user.php");
@@ -242,7 +246,7 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
 
                     require_once(NCONFDIR."/include/menu/menu_start.html");
                     require_once(NCONFDIR."/include/menu/menu_user.php");
-                    require_once(NCONFDIR."/include/menu/menu_admin.php");
+                    require_once(NCONFDIR."/include/menu/menu_admin.php"); 
                     require_once(NCONFDIR."/include/menu/menu_end.php");
                     echo '<div id="maincontent">';
 
@@ -257,7 +261,7 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
                 message($critical, 'NConf has detected update or installation files in the main folder.<br><br>
                     To update NConf, go to the <b><a href="UPDATE.php">update page</a></b>
                     <br><br>
-                    If you have just finished installing or updating NConf, make sure you delete the following<br> 
+                    If you have just finished installing or updating NConf, make sure you delete the following<br>
                     files and directories to continue:<br>
                     <br>- INSTALL
                     <br>- INSTALL.php
@@ -306,7 +310,7 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
         message($info, '<b>redirecting to:</b> <a href="'.$url.'"> [ this page ] </a>');
         require_once(NCONFDIR.'/include/foot.php');
         exit;
-        
+
     }elseif ( !isset($_SESSION["group"]) AND ( !empty($_GET["goto"]) ) ){
         # do nothing, login page will be displayed
          message($debug, "display login page");
@@ -328,6 +332,5 @@ $NConf_PERMISSIONS = new NConf_PERMISSIONS;
     # close header-part in DEBUG section
     $debug_entry = NConf_HTML::line().NConf_HTML::text("Page specific debugging:", FALSE, 'b');
     NConf_DEBUG::set($debug_entry);
-
 
 ?>

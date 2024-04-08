@@ -52,7 +52,7 @@ if ( !empty($_POST["HIDDEN_selected_attr"]) ){
     $HIDDEN_selected_attr = $_POST["HIDDEN_selected_attr"];
 }
 if( ( isset($_POST["HIDDEN_config_class"]) ) AND ($_POST["HIDDEN_config_class"] != "") ){
-    $config_class = $_POST["HIDDEN_config_class"]; 
+    $config_class = $_POST["HIDDEN_config_class"];
 }
 
 $array_ids = explode(",", $_POST["HIDDEN_modify_ids"]);
@@ -83,10 +83,10 @@ if ( isset($_POST["multimodify"])
 }
 
 # Check mandatory fields
-while ( $attr = each($_POST) ){
-    if ( is_int($attr["key"]) ){
+foreach($_POST as $attr_key => $attr_value) {
+    if ( (int)$attr_key == $attr_key ){
         # Check mandatory fields
-        $m_array = db_templates("mandatory", $config_class, $attr["key"]);
+        $m_array = db_templates("mandatory", $config_class, $attr_key);
         if ( check_mandatory($m_array,$_POST) == "no"){
             $write2db = "no";
         }
@@ -102,20 +102,20 @@ if ( ( isset($oncall_check) AND $oncall_check === FALSE )
     $content .= NConf_HTML::back_button($_SESSION["go_back_page"]);
 
     echo NConf_HTML::limit_space($content);
-	
+
 	// Cache
     $_SESSION["cache"]["use_cache"] = TRUE;
     foreach ($_POST as $key => $value) {
     	$_SESSION["cache"]["handle"][$key] = $value;
     }
-                
+
 
     mysqli_close($dbh);
     require_once 'include/foot.php';
 
     exit;
 }
-			
+
 # clean existing cache
 if (isset($_SESSION["cache"]["handle"])) unset($_SESSION["cache"]["handle"]);
 
@@ -179,7 +179,7 @@ foreach ($array_ids as $id){
 
         }else{
             # entry is not a naming attr, lets try to modify:
-            
+
             if ($config_class == "host") {
                 # Vererben ?
                 if ( isset($vererben1) ) unset($vererben1);
@@ -239,7 +239,7 @@ foreach ($array_ids as $id){
                 }
             }else{
                 if (isset($_SESSION["cache"]["handle"])) unset($_SESSION["cache"]["handle"]);
-                
+
                 # get inheritance table for this host
                 $preview[$name] = inheritance_HostToService($id, "preview");
             }
@@ -266,9 +266,10 @@ foreach ($array_ids as $id){
 
 $_SESSION["go_back_page"] = str_replace("&goto=multimodify", "", $_SESSION["go_back_page"]);
 
-# bevore inheritance was here...
 
 // Content of this page
+//echo NConf_HTML::page_title($config_class, '');
+
 echo '<div style="width: 510px;">';
 
 #
@@ -305,10 +306,12 @@ if ( !empty($info_summary["ignored"]) ){
 # ok
 if ( !empty($info_summary["ok"]) ){
     if ( isset($_POST["vererben"]) ){
-        echo "<h2>Successfully inherited attribute &quot;$HIDDEN_selected_attr&quot; to selected services on $config_class(s):</h2><ul>";
+        echo "<h2>Successfully inherited attribute &quot;$HIDDEN_selected_attr&quot; to selected services on $config_class(s):</h2>";
     }else{
-        echo "<h2>Successfully modified attribute &quot;$HIDDEN_selected_attr&quot; of $config_class(s):</h2><ul>";
+        echo NConf_HTML::text("Successfully modified attribute &quot;$HIDDEN_selected_attr&quot; of $config_class(s):", FALSE);
+
     }
+    echo "<ul>";
     foreach ($info_summary["ok"] as $item){
         echo "<li>$item</li>";
     }
@@ -350,7 +353,7 @@ if ($config_class == "host") {
             $inheritance_details .= NConf_HTML::title($title, 3, 'class="accordion_title ui-accordion-header ui-helper-reset ui-state-default"');
             $inheritance_details .= '<div class="accordion_content" style="display:none;">'.$service_table.'</div>';
         }
-        
+
         # print tables
         echo '<div class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons">';
             echo $inheritance_details;

@@ -44,7 +44,7 @@ class NConf_Deployment{
             );
         }elseif (ALLOW_DEPLOYMENT && (!ALLOW_DIRECT_DEPLOYMENT && empty($_POST["status"]) ) ){
             echo NConf_HTML::limit_space(
-                NConf_HTML::show_error('ERROR', 'Please first run the "Generate Nagios config".')
+                NConf_HTML::show_error('ERROR', 'Please first click "Generate Config".')
             );
         }elseif ( (ALLOW_DEPLOYMENT && ALLOW_DIRECT_DEPLOYMENT)
             ||    (ALLOW_DEPLOYMENT

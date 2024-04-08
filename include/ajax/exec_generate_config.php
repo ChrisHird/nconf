@@ -1,6 +1,7 @@
 <?php
     require_once 'main.php';
-    
+
+
     # Remove lock file if process fails
     $lock_file = 'temp/generate.lock';
     function remove_lock(){
@@ -94,7 +95,7 @@
                   WHERE id_attr=fk_id_attr
                       AND naming_attr='yes'
                       AND id_class=fk_id_class
-                      AND (config_class = 'nagios-collector' OR config_class = 'nagios-monitor') 
+                      AND (config_class = 'nagios-collector' OR config_class = 'nagios-monitor')
                   ORDER BY attr_value";
 
     $result = db_handler($query, "result", "fetch all monitor and collector servers from DB");
@@ -120,7 +121,7 @@
 
 
             // print each line
-            foreach ($output AS $line){
+            foreach ($output as $line){
                 // Filter some lines:
                 if ( empty($line)) continue;
                 if ( strpos($line, "Copyright")) continue;
@@ -137,15 +138,15 @@
                 }
             }
 
-            
+
     echo    '</pre>
         </div>';
 
-        
+
     // create tar file
     system("cd ".NCONFDIR."/temp; tar -cf NagiosConfig.tar global ".implode(" ", $servers));
 
-    // add folders with static config to tar file           
+    // add folders with static config to tar file
     foreach ($STATIC_CONFIG as $static_folder){
        if(!is_empty_folder($static_folder) and is_empty_folder($static_folder) != "error"){
            $last_folder = basename($static_folder);
@@ -157,11 +158,10 @@
     system("cd ".NCONFDIR."/temp; gzip NagiosConfig.tar; mv NagiosConfig.tar.gz NagiosConfig.tgz");
 
     echo '<br><br>';
-    echo NConf_HTML::title('Running syntax check:');
+    echo NConf_HTML::title('Checking your config for any issues:');
 
     //$icon_count = 1;
-    echo '<div class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons ui-nconf-accordion-list">';
-
+    echo '<div class="ui-accordion ui-widget ui-helper-reset ui-accordion-icons ui-nconf-accordion-list" style="max-height:200px;overflow-y:auto;">';
 
     ### SYNTAX CHECK
     # now run tests on all generated files
@@ -196,22 +196,33 @@
 
         $total_msg = '<span class="notBold accordion_header_right">'.$total_msg.'</span>';
         // print server info
-        $title = '<span class="ui-icon ui-icon-triangle-1-e"></span><a href="#">'.$server_str.$total_msg.'</a>';
-        echo NConf_HTML::title($title, 3, 'class="accordion_title ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom"');
-        echo '<div class="accordion_content ui-widget-content ui-corner-bottom monospace" style="display: none;">';
-            foreach($srv_summary[$server] as $line){
+//        $title = '<span class="ui-icon ui-icon-triangle-1-e"></span><a href="#">'.$server_str.$total_msg.'</a>';
+//        echo NConf_HTML::title($title, 3, 'class="accordion_title ui-accordion-header ui-helper-reset ui-state-default ui-corner-top ui-corner-bottom"');
+//        echo '<div class="accordion_content ui-widget-content ui-corner-bottom monospace" style="display: none;">';
+        echo '<div class="monospace" style="background:white; color: #39484B; font-size:.9em; padding: 0 8px; border:1px #555 solid; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;">';
+            $startOutput = 0;
+            foreach($srv_summary[$server] as $key=>$line){
+              if ($startOutput == 1) {
                 if ( preg_match("/^Error:/",$line) ){
                     echo '<span class="red">'.$line.'</span>';
                 }elseif ( preg_match("/^Warning:/",$line) ){
                     echo '<span class="orange">'.$line.'</span>';
+                }elseif ( array_key_last($srv_summary[$server]) == $key) {
+                    // The very last line of the output, but only if not error/warning
+                    echo '<span class="white"><b>'.$line.'</b></span>';
                 }else{
                     echo $line;
                 }
                 echo '<br>';
+              }
+              if (substr($line,0,7) == 'Website') {
+                echo '<br />';
+                $startOutput = 1;
+              } // begin outputting after the header (which ends with Website:)
             }
             echo '<br>';
-        echo '</div>';
-        
+        echo '</div><br />';
+//        echo $line;
     }
 
 
@@ -228,7 +239,7 @@
         system("rm -rf ".NCONFDIR."/temp/*");
 
         if(ALLOW_DEPLOYMENT == 1){
-            echo NConf_HTML::title('Deploy generated config:');
+            echo NConf_HTML::title('Looks good! Ready to deploy.');
 
             // check  if new deployment is configured
             $deployment_config = NCONFDIR.'/config/deployment.ini';
@@ -244,7 +255,7 @@
             if ($deployment_info){
                 $content = 'The generated configuration has been written to the "nconf/output/" directory.<br>
                             To set up more sophisticated deployment functionality, please edit your "config/deployment.ini" file accordingly.<br>
-                            For a complete list of available deployment options, refer to the online documentation on 
+                            For a complete list of available deployment options, refer to the online documentation on
                             <a href="http://www.nconf.org" target="_blank">www.nconf.org</a>.';
                 echo NConf_HTML::limit_space(
                     NConf_HTML::show_highlight('Note', $content)
@@ -253,7 +264,7 @@
                 // Show deployment button
                 echo "<form method=\"POST\" action=\"call_file.php?module_file=deployment/main.php\" id=buttons>";
                     echo '<input type=hidden name=status value="'.$status.'">';
-                    echo '<br><input type="submit" name="submit" value="Deploy" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">';
+                    echo '<br><input type="submit" name="submit" value="Deploy" id="DeployBTN">';
                 echo "</form><br>";
             }
 

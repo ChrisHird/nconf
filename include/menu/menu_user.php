@@ -4,20 +4,15 @@ echo '
     <div class="ui-widget-content box_content">';
 
         ###
-        # user navigation start
-        $user_menu_begin = array();
-        array_push($user_menu_begin, array("nav_links" => "Show History::history.php", "friendly_name" => "", "grouping" => ""));
-        array_push($user_menu_begin, array("nav_links" => "Show Host parent / child view::dependency.php", "friendly_name" => "", "grouping" => ""));
-        # create output
-        create_menu($user_menu_begin);
 
         $user_menu_begin2 = array();
         # Create oncall link, if $ONCALL_GROUPS is defined
         if (!empty($ONCALL_GROUPS)){
             array_push($user_menu_begin2, array("nav_links" => "Change on-call settings::overview.php?class=contact&amp;xmode=pikett", "friendly_name" => "", "grouping" => ""));
         }
+
         # Generate Nagios config link
-        array_push($user_menu_begin2, array("nav_links" => "Generate Nagios config::generate_config.php", "friendly_name" => "", "grouping" => ""));
+//        array_push($user_menu_begin2, array("nav_links" => "Generate Config::generate_config.php", "friendly_name" => "", "grouping" => ""));
 
         # create output
         create_menu($user_menu_begin2);
@@ -46,7 +41,6 @@ echo '
 
         # Display  menu
         create_menu($user_menu_end);
-
 
 echo '</div>';
 

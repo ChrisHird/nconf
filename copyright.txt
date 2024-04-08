@@ -1,0 +1,38 @@
+Original Copyright Information from Old Version:
+
+Copyright © 2006 - 2012
+Sunrise Communications AG, Zurich, Switzerland
+
+Project homepage: www.nconf.org
+
+Adapted for Nagios Enterprise Monitoring Server by Robbie Ferguson
+
+ 
+Attention
+This version of NConf contains heavy customizations for Nagios Core on modern architecture.
+This version of the release is not directly supported by the original authors.
+To contribute, visit https://github.com/ChrisHird/nconf
+
+Developed by:
+Fabian Gander, Angelo Gargiulo, Bernhard Waldvogel, Robbie Ferguson;
+
+License:
+This software is distributed under the GNU General Public License (GPL).
+
+Disclaimer of warranty:
+NConf is provided as is with NO WARRANTY OF ANY KIND, including the warranty
+of design, merchantability, and fitness for a particular purpose.
+
+Trademarks:
+Sunrise and the Sunrise logo are trademarks, servicemarks, registered trademarks
+or registered servicemarks owned by Sunrise Communications AG.
+
+Nagios and the Nagios logo are trademarks, servicemarks, registered trademarks
+or registered servicemarks owned by Nagios Enterprises, LLC.
+
+Additional copyrights:
+Sweetie icons by Joseph North.
+
+All other trademarks, servicemarks, registered trademarks, and
+registered servicemarks are the property of their respective owner(s).
+

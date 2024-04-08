@@ -10,8 +10,8 @@
 DBHOST=localhost
 DBPORT=3306
 DBNAME=nconf
-DBUSER=nconfuser
-DBPASS=nconfpass
+DBUSER=nconfadmin
+DBPASS=shieldadvanced
 
 # Other variables
 DESTINATION=/usr/local/nconf/BACKUP/db

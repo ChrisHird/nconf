@@ -72,9 +72,7 @@
 
 <!-- jQuery part -->
 <script type="text/javascript">
-
-// not wait for document ready, because overview can be slow on loading...
-//    $(document).ready(function(){
+    $(document).ready(function(){
         var cookie_status = readCookie('advanced_box');
         if (cookie_status && cookie_status == "open") {
             cookie_status = 0;
@@ -84,7 +82,7 @@
         $("#advanced_accordion").accordion({
             collapsible: true,
             active: cookie_status,
-            changestart: function(event, ui) {
+            activate: function(event, ui) {
                     var active = $( this ).accordion( "option", "active" );
                     if (active === false){
                         // Remove advanced boxes
@@ -98,8 +96,6 @@
 
                 }
         });
-
-
-//    });
+    });
 </script>
 <!-- END of jQuery part -->

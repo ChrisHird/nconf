@@ -988,6 +988,8 @@ $fattr,$fval
 
                 # this routine makes sense both for collectors and monitors, since hosts/services can also be disabled (not monitored) on a monitor,
                 # and must therefore be removed from any items they might be linked to;
+		
+		my $temp_hostname = "";
 
                 foreach my $attr (@item_links){
 
@@ -1005,7 +1007,40 @@ $fattr,$fval
                         }
                         undef $attr->[1];
                     }
-                }
+
+                    # handle service escalations - if there is a service escalation defined that is not valid delete it
+                    if($class eq "service-escalation"){
+                        if($attr->[0] eq "host_name"){
+                                $temp_hostname = $attr->[3];
+                        }
+                        if($attr->[0] eq "service_description"){
+                             my @temporaer2 = &getItemsLinked($attr->[3]);
+                                    foreach my $tempo (@temporaer2){
+                                            if($tempo->[0] eq "host_name"){
+                                                    if($tempo->[3] ne $temp_hostname){
+                                                            &logger(4,"Service escalation for non-matching service '$attr->[3]' on host '$temp_hostname' - removing");
+                                                            undef $attr->[1];
+                                                    }
+                                            }
+                                    }
+                        }
+                    }
+
+                    # handle advanced service escalations
+                    if($class eq "adv-service-escalation"){
+                        if($attr->[0] eq "service_description"){
+                             my @temporaer = &getItemData($attr->[3]);
+                             foreach my $tempo (@temporaer){
+                                  if($tempo->[0] eq "service_description"){
+                                         &logger(4,"Replacing Advanced Service NConf internal service name");
+                                         &logger(4,"Before: '$attr->[1]' replace with '$tempo->[1]'");
+                                         $attr->[1] = $tempo->[1];
+                                         &logger(4,"After: '$attr->[1]'");
+                                  }
+                             }
+                        }
+                    }
+               }
 
                 # apply certain class specific exceptions
                 # caution: this function must always be called before makeValuesDistinct() AND after checking for collector specific items
@@ -1029,7 +1064,7 @@ $fattr,$fval
                     if(defined($attr->[0]) && $attr->[1] eq "" && $class ne "hostgroup" && $class ne "servicegroup"){
 
                         # remove the whole item from the configuration, unless it's an advanced-service (special rule applies there)
-                        unless($class eq "advanced-service" && ($attr->[0] eq "host_name" || $attr->[0] eq "hostgroup_name" || $attr->[0] eq "servicegroups")){
+                        unless($class eq "advanced-service" && ($attr->[0] eq "host_name" || $attr->[0] eq "hostgroup_name" || $attr->[0] eq "servicegroups" || $attr->[0] eq "host_exclude" || $attr->[0] eq "hostgroup_exclude")){
                             &logger(4,"Removing $class '$id_item->[0]' from config because the attribute '$attr->[0]' was empty");
                             $has_empty_linking_attrs = 1;
                         }
@@ -1143,6 +1178,49 @@ $fattr,$fval
             my @item_attrs = &getItemData($id_item->[0]);
             foreach my $attr (@item_attrs){
                 if($attr->[0] ne "" && $attr->[1] ne "" && $attr->[2] ne "no"){ $fattr=$attr->[0];$fval=$attr->[1];write FILE}
+            }
+
+            ##### Process advanced-service excludes
+            if($class eq "advanced-service"){
+                # find host excludes and hostgroup excludes and assign them properly
+                my ($h_obj, $he_obj, $hg_obj, $hge_obj);
+                foreach my $attr (@item_links){
+                    if ($attr->[0] eq "host_name") {
+                        $h_obj = $attr;
+                    } elsif ($attr->[0] eq "host_exclude") {
+                        $he_obj = $attr;
+                    } elsif ($attr->[0] eq "hostgroup_name") {
+                        $hg_obj = $attr;
+                    } elsif ($attr->[0] eq "hostgroup_exclude") {
+                        $hge_obj = $attr;
+                    }
+                }
+                if ($he_obj) {
+                    if ($h_obj) {
+                        our @hostex = split/,/, $he_obj->[1];
+                       s/^/!/ for @hostex;
+                       $h_obj->[1] = join(',', ($h_obj->[1], @hostex));
+                    } else {
+                        $he_obj->[0] = "host_name";
+                        $he_obj->[2] = "yes";
+                        our @hostex = split/,/, $he_obj->[1];
+                       s/^/!/ for @hostex;
+                       $he_obj->[1] = join(',', @hostex);
+                    }
+                }
+                if ($hge_obj) {
+                    if ($hg_obj) {
+                        our @hostex = split/,/, $hge_obj->[1];
+                       s/^/!/ for @hostex;
+                       $hg_obj->[1] = join(',', ($hg_obj->[1], @hostex));
+                    } else {
+                        $hge_obj->[0] = "hostgroup_name";
+                        $hge_obj->[2] = "yes";
+                        our @hostex = split/,/, $hge_obj->[1];
+                       s/^/!/ for @hostex;
+                       $hge_obj->[1] = join(',', @hostex);
+                    }
+                }
             }
 
             ##### (1D) write linked items (processed above) to config

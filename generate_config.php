@@ -1,9 +1,8 @@
 <?php
 require_once 'include/head.php';
-
+echo '<img src="img/loader.gif" width="30" height="auto" />';
 $lock_file = 'temp/generate.lock';
 $status = check_file('file_exists', $lock_file, TRUE, "File/Directory still exists, please remove it: "); 
-
 
 if ( $status ){
     # lock file exists
@@ -17,8 +16,7 @@ if ( $status ){
     # but this will prevent lock file to stay there
     if ( $lock_file_age < 600 ){
         # some one other is generating the config
-        NConf_DEBUG::set('Someone else is already generating the configuration. If you believe this is in error, run: sudo nems-quickfix', 'ERROR');
-        
+        NConf_DEBUG::set('Someone else is already generating the configuration. If you believe this is in error, run: sudo quickfix', 'ERROR');
 
         # close page and cancel action
         if ( NConf_DEBUG::status('ERROR') ) {
@@ -49,7 +47,6 @@ $status = flock($generate_lock_handle, LOCK_EX | LOCK_NB); //lock the file
 
     // jQuery execute generate
     $(document).ready(function(){
-
     // disable interaction until page is loaded
     var dialog_loading = $('<div class="center"></div>')
         .html('<br><img src="img/working.gif"><h2>Please stand by...</h2><br><br><div id="progressbar"></div>')
@@ -64,10 +61,9 @@ $status = flock($generate_lock_handle, LOCK_EX | LOCK_NB); //lock the file
             height: 161
         });
 
-
         // accordion style enhanced to handle all items
-        $(".accordion_title").live("click hover", function(event) {
-            $(this).nconf_accordion_list(event);
+        $(".accordion_title").on("click hover", function(event) {
+          $(this).nconf_accordion_list(event);
         });
 
         // set the duration of one progress animation
@@ -94,8 +90,7 @@ $status = flock($generate_lock_handle, LOCK_EX | LOCK_NB); //lock the file
                         // progress status from file must be smaller or match the current value
                         // otherwise the status should be taken on else
                         current_percent += 1;
-                        
-                        
+
                     }else{
                         // progress status is biger, go to that current state
                         if ( percent > 100 ){
@@ -138,6 +133,7 @@ $status = flock($generate_lock_handle, LOCK_EX | LOCK_NB); //lock the file
                 dialog_loading.dialog('close');
             }
         });
+
     });
 
 </script>
@@ -149,4 +145,3 @@ $status = flock($generate_lock_handle, LOCK_EX | LOCK_NB); //lock the file
 require_once 'include/foot.php';
 
 ?>
-

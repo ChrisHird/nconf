@@ -4,7 +4,6 @@
 (function($){
     $.fn.nconf_accordion_list = function(event) {
         return $(this).each( function() {
-
             // accordion style enhanced to handle all items
             if (event.type == 'click'){
                 var clicked_element = $(this);
