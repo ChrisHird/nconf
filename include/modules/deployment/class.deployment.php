@@ -5,6 +5,7 @@
   Its easy to configure multiple deployments
   This main class can be expanded with other sub classes to handle more deployment capabilities
 */
+#[AllowDynamicProperties]
 class NConf_Deployment{
     public $path;
     public $modules = array();
