@@ -5,7 +5,6 @@
   Its easy to configure multiple deployments
   This main class can be expanded with other sub classes to handle more deployment capabilities
 */
-#[AllowDynamicProperties]
 class NConf_Deployment{
     public $path;
     public $modules = array();
@@ -18,7 +17,7 @@ class NConf_Deployment{
         $this->load_modules();
     }
 
-    //! Enables the module
+    //! Enables the module NOTE: the final private statement causes a warning, as private functions cannot be overridden it seems stupid to use it? 
     final private function load_modules(){
         $module_directories = getDirectoryTree($this->path);
         foreach ($module_directories AS $module_name) {
