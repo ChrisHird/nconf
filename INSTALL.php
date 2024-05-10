@@ -6,9 +6,9 @@
 # CONFIG
 #
 $nconfdir = dirname( $_SERVER["SCRIPT_FILENAME"] );
-require_once('config.orig/nconf.php');
+require_once('config/nconf.php');
 require_once(NCONFDIR.'/include/version.php');
-require_once('config.orig/authentication.php');
+require_once('config/authentication.php');
 require_once('include/functions.php');
 require_once('include/includeAllClasses.php');
 
