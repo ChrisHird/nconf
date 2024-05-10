@@ -32,7 +32,7 @@ define('CHECK_UPDATE', 0);
 #
 # Defines which design-template (skin) to use
 #
-define('TEMPLATE_DIR', 'nems_nconf');
+define('TEMPLATE_DIR', 'sas_nconf');
 
 #
 # Debug
