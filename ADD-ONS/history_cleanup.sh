@@ -5,7 +5,7 @@
 USER="nconfadmin"
 DBNAME="NConf"
 # enter password here, if your security allows it
-PASSWORD="shieldadvanced"
+PASSWORD="passwordtobeadded"
 
 # delete history entries older than
 # UNIT should be one of these : SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, QUARTER, or YEAR
